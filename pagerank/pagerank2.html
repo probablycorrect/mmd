@@ -71,7 +71,7 @@ M = matrix(c(0,0.5,0.5,0,0,1,1,0,0), nrow=3, ncol=3)</code></pre>
 1/3 \\
 1/3 \end{array} \right)\ \]</span></p>
 <pre class="r"><code>I = matrix(c(1/3,1/3,1/3), nrow=3, ncol=1)</code></pre>
-<p>As an exercise for understanding, lets construct the equations for each of the page ranks based on whats discussed above a = .85c + .05a + .05b + .05c =&gt; .95a = .9b + .05c b = .425a + .05a + .05b + .05c =&gt; .95b = .475a + .05c c = .425a + .85b + .05a + .05b + .05c =&gt; .95c = .475a + .9b</p>
+<p>As an exercise for understanding, lets construct the equations for each of the page ranks based on whats discussed above<br />a = .85c + .05a + .05b + .05c =&gt; .95a = .9b + .05c<br />b = .425a + .05a + .05b + .05c =&gt; .95b = .475a + .05c<br />c = .425a + .85b + .05a + .05b + .05c =&gt; .95c = .475a + .9b</p>
 <p>We know that the page rank matrix can then be defined as <span class="math">\[ A = \beta M + \frac{(1-\beta)}{N}I \]</span></p>
 <pre class="r"><code>B = 0.85
 N = 3</code></pre>
@@ -96,11 +96,6 @@ V</code></pre>
 ## [1,] 0.1293
 ## [2,] 0.0716
 ## [3,] 0.1325</code></pre>
-<pre class="r"><code>V*9</code></pre>
-<pre><code>##        [,1]
-## [1,] 1.1634
-## [2,] 0.6444
-## [3,] 1.1922</code></pre>
 
 
 </div>

@@ -34,10 +34,10 @@ $$ I = \left( \begin{array}{ccc}
 I = matrix(c(1/3,1/3,1/3), nrow=3, ncol=1)
 ```  
 
-As an exercise for understanding, lets construct the equations for each of the page ranks based on whats discussed above
-a = .85c + .05a + .05b + .05c => .95a = .9b + .05c
-b = .425a + .05a + .05b + .05c => .95b = .475a + .05c
-c = .425a + .85b + .05a + .05b + .05c => .95c = .475a + .9b
+As an exercise for understanding, lets construct the equations for each of the page ranks based on whats discussed above  
+a = .85c + .05a + .05b + .05c => .95a = .9b + .05c  
+b = .425a + .05a + .05b + .05c => .95b = .475a + .05c  
+c = .425a + .85b + .05a + .05b + .05c => .95c = .475a + .9b 
 
 We know that the page rank matrix can then be defined as
 $$ A = \beta M + \frac{(1-\beta)}{N}I $$
