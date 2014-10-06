@@ -1,27 +1,27 @@
 ---
-title: "PageRank1"
+title: "PageRank2"
 author: "Abhinav Nigam"
-date: "Saturday 04 October 2014"
+date: "Sunday 05 October 2014"
 output: html_document
 ---
 Consider three webpages with the links as below.  
-![Picture1](otc_pagerank1.gif)  
-We are going to compute PageRank using Google's formulation based on Adjacency Matrix formation followed by power iteration till the values converge. We are also going to counter the problem of *dead end*, C being one in this case, by using teleports with a $\beta$  value of 0.7. An additional constraint that we will introduce to get definite output is that the sum of Pageranks of the three pages must be equal to 3.
+![Picture1](otc_pagerank3.gif)  
+We are going to compute PageRank using Google's formulation based on Adjacency Matrix formation followed by power iteration till the values converge. We are also going to counter the problem of *dead ends* and *spider-traps* by using teleports with a $\beta$  value of 0.85.
 
 **Adjacency Matrix**  
 For finding the adjacency matrix, lets consider that there are *N* pages and page *j* has $\sf{d_{j}}$ outlinks. The matrix is then defined as  
 $$ \sf{M_{ij}} = \frac{1}{|\sf{d_{j}}|}, when \space j\rightarrow i $$
 $$ \sf{M_{ij}} = 0, when \space j\not\rightarrow i $$
 
-Considering the provided page diagram links, page A has 1 link each to B and C, page B has 1 link to C and page C has 1 self link. Thus, our adjacency matrix can be written as:
+Considering the provided page diagram links, page A has 1 link each to B and C, page B has 1 link to C and page C has 1 link to A. Thus, our adjacency matrix can be written as:
 $$ M = \left( \begin{array}{ccc}
-0 & 0 & 0 \\
+0 & 0 & 1 \\
 1/2 & 0 & 0 \\
-1/2 & 1 & 1 \end{array} \right)\ $$
+1/2 & 1 & 0 \end{array} \right)\ $$
 
 ```{r}
 # In R, The matrix content is filled along the columns by default, this behavior can be changed by toggling the inrow flag
-M = matrix(c(0,0.5,0.5,0,0,1,0,0,1), nrow=3, ncol=3)
+M = matrix(c(0,0.5,0.5,0,0,1,1,0,0), nrow=3, ncol=3)
 ```
 
 Lets also define the identity matrix that we will use, to consider random jumps scenario in order to deal with *dead end*. This can be written as:
@@ -34,11 +34,16 @@ $$ I = \left( \begin{array}{ccc}
 I = matrix(c(1/3,1/3,1/3), nrow=3, ncol=1)
 ```  
 
+As an exercise for understanding, lets construct the equations for each of the page ranks based on whats discussed above
+a = .85c + .05a + .05b + .05c => .95a = .9b + .05c
+b = .425a + .05a + .05b + .05c => .95b = .475a + .05c
+c = .425a + .85b + .05a + .05b + .05c => .95c = .475a + .9b
+
 We know that the page rank matrix can then be defined as
 $$ A = \beta M + \frac{(1-\beta)}{N}I $$
 
 ```{r}
-B = 0.7
+B = 0.85
 N = 3
 ```
 
@@ -66,8 +71,3 @@ repeat{
 
 V
 ```
-Now that we have the page ranks, let us also make sure that we satisfy the constraint of the sum of page ranks being 3. This is achieved by multiplying the ranks we got by 9.
-```{r}
-V*9
-```
-As expected, C is significantly higher ranked than the other two, owing to all the inlinks, followed by B and A.
