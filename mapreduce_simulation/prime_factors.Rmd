@@ -1,0 +1,59 @@
+---
+title: "MapReduce Simulation"
+author: "Abhinav Nigam"
+date: "Monday 06 October 2014"
+output: html_document
+---
+Suppose our input data to a map-reduce operation consists of integer values (the keys are not important). The map function takes an integer i and produces the list of pairs (p,i) such that p is a prime divisor of i. For example, map(12) = [(2,12), (3,12)].
+The reduce function is addition. That is, reduce(p, [i1, i2, ...,ik]) is (p,i1+i2+...+ik).  
+
+Compute the output, if the input is the set of integers 15, 21, 24, 30, 49.
+
+Let us simulate Map Reduce functions using Python. 
+Our map function expects an integer, and produces a list of pairs which looks like (prime factor, integer)  
+
+Since we are not running this on a Hadoop installation, we also need to simulate the shuffle and sort functionality, so lets write a function for that. Our shuffle and sort method expects a list of the kind of lists that are emitted by our map function, and emits a dict with names as the prime factors, and values as all the inputs that had that prime factor. Note that no sorting is happening here as its redundant.  
+
+Finally, our reduce function simply takes the dict emitted by shuffle-sort, adds up the values for each element of the dict, and emits a list with elements as (prime_factor, sum)  
+
+```{r engine='python'}
+def is_prime(n):
+  if n == 2 or n == 3: return True
+  if n < 2 or n % 2 == 0: return False
+  if n < 9: return True
+  if n % 3 == 0: return False
+  r = int(n**0.5)
+  f = 5
+  while f <= r:
+    print '\t',f
+    if n % f == 0: return False
+    if n % (f + 2) == 0: return False
+    f +=6
+  return True
+
+def map(x):
+  output = []
+  for i in range(2, (x/2) + 1):
+    if is_prime(i) and x%i == 0:
+      output.append((i,x))
+  return output
+
+from collections import defaultdict
+def shuffle_sort(x):
+  output = defaultdict(list)
+  for inner_list in x:
+    for key,value in inner_list:
+      output[key].append(value)
+  return output
+
+def reduce(x):
+  output = []
+  for key, values in x.iteritems():
+    sum = 0
+    for value in values:
+      sum += value
+    output.append((key, sum))
+  return output
+
+print reduce(shuffle_sort([map(15), map(21), map(24), map(30), map(49)]))
+```
