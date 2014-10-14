@@ -1,0 +1,51 @@
+---
+title: "Edit Distance"
+author: "Abhinav Nigam"
+date: "Tuesday 14 October 2014"
+output: html_document
+---
+The edit distance is the minimum number of character insertions and character deletions required to turn one string into another. Compute the edit distance between each pair of the strings he, she, his, and hers.  
+
+The edit distance between 2 strings can be calculated recursively, by calculating it for all possible substring combinations and taking the smallest one as the answer. Note that this isn't an efficient way of calculating edit distances, it can be improved by avoiding repeat calculations between parts of string for which we already have the minimum value, however the recursive method is easier for understanding and illustration.  
+
+Let us try to find the sub-problem that lends itself to repetition. For 2 substrings of length i and j of the given strings X and Y or length m and n respectively, the edit distance can be denoted as:
+
+\[ 
+D(i,j) = min\begin{cases}
+D(i-1,j) + 1\\
+D(i,j-1) + 1\\
+D(i-1,j-1) + \begin{cases}
+2; & \text if X(i) \not= Y(j)\\
+0; & \text if X(i) = Y(j)
+\end{cases}
+\end{cases}
+\]
+
+What we thus want to find is D(m,n). The following Python function can achieve this.
+
+```{r engine='python'}
+def edit_distance(x, y):
+  
+  # Base Cases
+  if len(x) == 0 and len(y) == 0:
+    return 0
+
+  if len(x) == 0:
+    return len(y)
+
+  if len(y) == 0:
+    return len(x)
+
+  case_one = edit_distance(x[:-1], y) + 1
+  case_two = edit_distance(x, y[:-1]) + 1
+  case_three = edit_distance(x[:-1], y[:-1]) + (0 if x[-1] == y[-1] else 2)
+
+  return min(case_one, case_two, case_three)
+
+print edit_distance('he', 'she')
+print edit_distance('he', 'his')
+print edit_distance('he', 'hers')
+print edit_distance('she', 'his')
+print edit_distance('she', 'hers')
+print edit_distance('his', 'hers')
+```
