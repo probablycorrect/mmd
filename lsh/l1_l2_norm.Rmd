@@ -1,0 +1,37 @@
+---
+title: "L1 & L2 Norm"
+author: "Abhinav Nigam"
+date: "Wednesday 15 October 2014"
+output: html_document
+---
+Suppose we want to assign points to whichever of the points (0,0) or (100,40) is nearer. Depending on whether we use the L1 or L2 norm, a point (x,y) could be clustered with a different one of these two points. For this problem, you should work out the conditions under which a point will be assigned to (0,0) when the L1 norm is used, but assigned to (100,40) when the L2 norm is used. Provided points:
+(59,10)
+(56,15)
+(53,18)
+(58,13)
+
+This simply involves calculating the L1 and L2 norm distances of each of the provided point with the given 2 points.
+
+```{r engine='python'}
+def l1_norm(x, y):
+  (x1, y1) = x
+  (x2, y2) = y
+  return abs(x1 - x2) + abs(y1 - y2)
+
+def l2_norm(x, y):
+  (x1, y1) = x
+  (x2, y2) = y
+  return ((x1 - x2)**2 + (y1 - y2)**2)**0.5
+
+def find_nearer(x, y, z, method):
+  if method == 'l1':
+    return z if (l1_norm(x, y) > l1_norm(x, z)) else y
+  else:
+    return z if (l2_norm(x, y) > l2_norm(x, z)) else y
+
+for point in [(59,10),(56,15),(53,18),(58,13)]:
+  print "For %s, nearer by l1: %s, nearer by l2: %s" % (point, find_nearer(point,(0,0),(100,40),"l1"), find_nearer(point,(0,0),(100,40),"l2"))
+
+```
+
+
