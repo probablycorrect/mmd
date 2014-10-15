@@ -1,0 +1,36 @@
+---
+title: "Locality Sensitive Hashing"
+author: "Abhinav Nigam"
+date: "Wednesday 15 October 2014"
+output: html_document
+---
+
+Here is a matrix representing the signatures of seven columns, C1 through C7.
+$$ \left( \begin{array}{ccc}
+C1 &  C2 &	C3 &	C4 & C5 &	C6 &	C7 \\
+1 &	2 &	1 &	1 &	2 &	5 &	4 \\
+2 &	3 &	4 &	2 &	3 &	2 &	2 \\
+3 &	1 &	2 &	3 &	1 &	3 &	2 \\
+4 &	1 &	3 &	1 &	2 &	4 &	4 \\
+5	& 2	& 5	& 1	& 1	& 5	& 1 \\
+6	& 1	& 6	& 4	& 1	& 1	& 4
+\end{array} \right)\ $$
+Suppose we use locality-sensitive hashing with three bands of two rows each. Assume there are enough buckets available that the hash function for each band can be the identity function (i.e., columns hash to the same bucket if and only if they are identical in the band).
+
+As mentioned, the columns will only hash to the same bucket (and hence become the candidates) if they are identical in the band. We can find the candidate pairs by simply comparing rows, 2 at a time, and checking for columns that have identical values. If columns are identical in both rows, they form a candidate pair. The python code below takes as input, 2 rows from the above matrix as lists, and prints pairs that are candidates for those 2 rows:
+
+```{r engine='python'}
+def candidate_pairs(x, y):
+  i = 0
+  while i < len(x):
+    j = i + 1
+    while j < len(x):
+      if x[i] == x [j] and y[i] == y[j]:
+        print "C%s,C%s" % (i+1,j+1)
+      j += 1
+    i += 1
+
+candidate_pairs([1,2,1,1,3,5,4], [2,3,5,2,3,2,2])
+candidate_pairs([3,1,2,3,1,3,2], [4,1,3,1,2,4,4])
+candidate_pairs([5,2,5,1,1,5,1], [6,1,6,4,1,1,4])
+```
