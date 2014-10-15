@@ -1,0 +1,26 @@
+---
+title: "2 Shingles"
+author: "Abhinav Nigam"
+date: "Wednesday 15 October 2014"
+output: html_document
+---
+Find the set of 2-shingles for the "document":
+ABRACADABRA
+and also for the "document":
+BRICABRAC
+What is the Jaccard similarity between the two documents?
+
+We know that Jaccard similarity for two sets x and y can be represented as:
+$$ jac(x,y) = \frac{|x \cap y|}{|x \cup y|} $$
+
+So we have to find the 2-shingle sets for each of the strings, then find the union and intersection of the two sets.
+
+```{r engine='python'}
+def two_shingle_set(x):
+  return set(["%s%s" % (x[i], x[i+1]) for i in range(0,len(x) - 1)])
+x = two_shingle_set("ABRACADABRA")
+y = two_shingle_set("BRICABRAC")
+print x
+print y
+print "Jaccard Similarity: %s/%s" % (len(x.intersection(y)),len(x.union(y)))
+```
