@@ -1,0 +1,47 @@
+---
+title: "Spectral Clustering on Laplacian Matrix"
+author: "Abhinav Nigam"
+date: "Saturday 25 October 2014"
+output: html_document
+---
+
+You are given the following graph.
+<pre>
+   2 ----6
+ /  \    |
+1    4   |
+ \  /  \ |
+  3      5
+</pre>
+The goal is to find two clusters in this graph using Spectral Clustering on the Laplacian matrix. Compute the Laplacian of this graph. Then compute the second eigen vector of the Laplacian (the one corresponding to the second smallest eigenvalue).
+
+To cluster the points, we decide to split at the mean value. We say that a node is a tie if its value in the eigen-vector is exactly equal to the mean value. Let's assume that if a point is a tie, we choose its cluster at random. 
+
+Lets write the Laplacian Matrix for this graph:
+
+$$ L = \left( \begin{array}{ccc}
+2 & -1 & -1 & 0 & 0 & 0 \\
+-1 & 3 & 0 & -1 &	0 &	-1 \\
+-1 & 0 & 2 & -1 &	0 &	0 \\
+0 &	-1 & -1 &	3 &	-1 & 0 \\
+0 &	0 &	0 &	-1 & 2 & -1 \\
+0	& -1 & 0 & 0 & -1	& 2 
+\end{array} \right)\ $$
+
+```{r}
+# In R, The matrix content is filled along the columns by default, this behavior can be changed by toggling the inrow flag
+L = matrix(c(2,-1,-1,0,0,0,-1,3,0,-1,0,-1,-1,0,2,-1,0,0,0,-1,-1,3,-1,0,0,0,0,-1,2,-1,0,-1,0,0,-1,2), nrow=6, ncol=6)
+L
+```
+
+Lets find the eigen values and vectors of L
+```{r}
+eig = eigen(L)
+eig
+```
+Second largest eigenvalue here is 1. The eigen vector for it
+```{r}
+eig$vectors[,5]
+```
+
+Thus, 1 and 3 are in one cluster, 5 and 6 are in the other cluster, 2 and 4 are both tie and can go to either.
